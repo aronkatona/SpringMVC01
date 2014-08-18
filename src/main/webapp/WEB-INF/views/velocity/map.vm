@@ -1,0 +1,20 @@
+<html>
+<head>
+<title>Pálya</title>
+</head>
+<body>
+#set($start = 0)
+#set($end =4)
+#set($range = [$start..$end])
+
+<table border="5" width="500" height="500">
+#foreach($i in $range)
+<tr>
+   #foreach($j in $range)
+	  <td>asd</td>
+   #end
+</tr>  
+#end
+</table>
+</body>
+</html>

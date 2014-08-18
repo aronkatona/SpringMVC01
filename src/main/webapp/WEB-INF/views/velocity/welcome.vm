@@ -1,14 +1,18 @@
 <html>
 <head>
-	<title>Home</title>
+<title>Üdvözöllek</title>
 </head>
 <body>
-<h1>
-	#set( $name = "Asd" )
- 
-<h2> $name is using velocity</h2>
-</h1>
+Lépj be a szerverre vagy regisztrálj!
+<form name="input" action = "/controllers/map" method="get">
+Username: <input type="text" name="user">
+<input type="submit" value="Login">
 
-<P>  . </P>
+</form>
+<a href="/controllers/signup">Sign up</a>
+#if (!$success)
+ures
+#else telt
+#end
 </body>
 </html>
