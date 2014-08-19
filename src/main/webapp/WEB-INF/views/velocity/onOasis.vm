@@ -1,0 +1,13 @@
+<html>
+<head>
+<title>Oasis</title>
+</head>
+<body>
+Üdv $userName
+Gold: $gold
+	<li>harcosok száma: $numberOfWarriors</li>
+	<li>ijjászok száma: $numberOfArchers</li></br>
+<a href="/controllers/sendUnit.$X.$Y.$userName">Egységek küldése</a></br>
+<a href="/controllers/backToMap.$X.$Y.$userName">Térkép</a>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>Támadás</title>
+</head>
+<body>
+Üdv $userName
+<form name="buyTroops" action = "/controllers/sentUnit.$X.$Y.$userName" method="get">
+Harcos: <input type="text" name="numberOfWarriors"></br>
+Ijjász: <input tpye="text" name="numberOfArchers"></br>
+<input type="submit" value="Send">
+
+</form>
+
+
+</body>
+</html>

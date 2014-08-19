@@ -1,0 +1,11 @@
+<html>
+<head>
+<title>Lucky</title>
+</head>
+<body>
+Üdv $userName
+Gold: $gold</br>
+<a href="/controllers/sendUnit.$X.$Y.$userName">Egységek küldése</a></br>
+<a href="/controllers/backToMap.$X.$Y.$userName">Térkép</a>
+</body>
+</html>

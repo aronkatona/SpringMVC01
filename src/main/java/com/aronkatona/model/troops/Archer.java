@@ -6,7 +6,7 @@ public class Archer extends Troop {
 		this.hp = 30;
 		this.damage = 15;
 		this.defense = 5;
-		this.movementSpeed = 10;
+		this.movementSpeed = 0.15;
 		this.onWay = false;
 	}
 

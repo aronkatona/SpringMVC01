@@ -1,0 +1,14 @@
+<html>
+<head>
+<title>Falu</title>
+</head>
+<body>
+Üdv $userName a faludban
+Gold: $gold </br>
+Egységeim száma:
+<li>elérhetõ harcosok: $numberOfWarriors     harcosok uton: $numberOfWarriorsOnWay</li>
+<li>elérhetõ ijjászok: $numberOfArchers		 ijjaszok uton: $numberOfArchersOnWay</li></br>
+<a href="/controllers/buyTroops.$X.$Y.$userName">Egység gyártás</a>
+<a href="/controllers/backToMap.$X.$Y.$userName">Térkép</a>
+</body>
+</html>

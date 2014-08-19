@@ -30,6 +30,7 @@ public class Field {
 		return user;
 	}
 	public void setUser(User user) {
+		this.oasis = null;
 		this.user = user;
 	}
 	public Oasis getOasis() {
@@ -43,6 +44,14 @@ public class Field {
 	}
 	public void setLucky(Lucky lucky) {
 		this.lucky = lucky;
+	}
+	
+	@Override
+	public String toString(){
+		if(this.user != null) return "user";
+		if(this.oasis != null) return "oasis";
+		if(this.lucky != null) return "lucky";
+		return "null";
 	}
 
 	

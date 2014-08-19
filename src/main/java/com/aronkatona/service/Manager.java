@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.aronkatona.model.map.Map;
+import com.aronkatona.model.troops.Archer;
+import com.aronkatona.model.troops.Troop;
+import com.aronkatona.model.troops.Warrior;
 import com.aronkatona.model.user.User;
 
 public class Manager {
@@ -13,6 +16,21 @@ public class Manager {
 	
 	static{
 		users = new ArrayList<User>();
+		User asd = new User("asd");
+		for(int i = 0; i < 5; ++i)
+		asd.addTroop(new Warrior());
+		for(int i = 0; i < 3; ++i)
+		asd.addTroop(new Archer());
+		users.add(asd);
+		
+		
+		User qwe = new User("qwe");
+		List<Troop> qweTroops = new ArrayList<Troop>();
+		for(int i = 0; i < 8; ++i)
+		qwe.addTroop(new Warrior());
+		for(int i = 0; i < 4; ++i)
+		qwe.addTroop(new Archer());;
+		users.add(qwe);
 		map = new Map(5);
 	}
 

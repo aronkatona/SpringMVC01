@@ -1,20 +1,31 @@
+##<meta http-equiv="refresh" content="1" />
 <html>
 <head>
 <title>Pálya</title>
 </head>
-<body>
-#set($start = 0)
-#set($end =4)
-#set($range = [$start..$end])
-
+<body link="black" vlink="black">
+#set($mapSize = $mapSize - 1)
+Üdv $userName x:$X,y:$Y
 <table border="5" width="500" height="500">
-#foreach($i in $range)
+#foreach($i in [0..$mapSize])
 <tr>
-   #foreach($j in $range)
-	  <td>asd</td>
+   #foreach($j in [0..$mapSize])
+   		#if($i == $X && $j == $Y)
+   			<td bgcolor="red"><a href="/controllers/inVillage.$i.$j.$userName">Falum</a></td>
+   	  	#elseif($fields[$i][$j] == "user")
+	  		<td bgcolor="blue">$fields[$i][$j]</td>
+	    #elseif($fields[$i][$j] == "oasis")
+   			<td bgcolor="green"><a href="/controllers/onOasis.$i.$j.$userName">$fields[$i][$j]</a></td>
+   	    #elseif($fields[$i][$j] == "lucky")
+   	  		<td bgcolor="yellow"><a href="/controllers/onLucky.$i.$j.$userName">$fields[$i][$j]</a></td>
+   	    #elseif($fields[$i][$j] == "null")
+   	  		<td bgcolor="white">$fields[$i][$j]</td>
+   	  	#end
    #end
 </tr>  
 #end
 </table>
+
+
 </body>
 </html>
