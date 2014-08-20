@@ -1,12 +1,29 @@
 <html>
 <head>
+
+
+<script>
+function validateBuyForm() {
+    var numberOfWarriors = parseInt(document.forms["buyForm"]["numberOfWarriors"].value);
+    var numberOfArchers = parseInt(document.forms["buyForm"]["numberOfArchers"].value);
+    if ((numberOfWarriors * $priceOfWarrior + numberOfArchers * $priceOfArcher) > $gold) {
+        alert("Nincs ennyi pénzed, " + ((numberOfWarriors * $priceOfWarrior + numberOfArchers * $priceOfArcher) -  $gold) +
+        	 "-el akartal tobbet kolteni");
+        return false;
+    }
+}
+</script>
+
+
+
 <title>Vásásrlás</title>
 </head>
 <body>
-Üdv $userName
-<form name="buyTroops" action = "/controllers/boughtTroops.$X.$Y.$userName" method="get">
-Harcos: <input type="text" name="numberOfWarriors"> $10</br>
-Ijjász: <input tpye="text" name="numberOfArchers">  $8</br>
+
+Üdv $userName, goldod: $gold$
+<form name="buyForm" action = "/controllers/boughtTroops.$X.$Y.$userName" method="get" onsubmit="return validateBuyForm()" >
+Harcos: <input type="text" name="numberOfWarriors" value="0"> $priceOfWarrior$</br>
+Ijjász: <input tpye="text" name="numberOfArchers" value="0">  $priceOfArcher$</br>
 <input type="submit" value="Buy">
 
 </form>

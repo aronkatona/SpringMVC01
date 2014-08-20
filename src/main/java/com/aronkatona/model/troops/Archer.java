@@ -8,6 +8,12 @@ public class Archer extends Troop {
 		this.defense = 5;
 		this.movementSpeed = 0.15;
 		this.onWay = false;
+		this.price = 8;
+	}
+	
+	@Override
+	public String toString(){
+		return "Archer";
 	}
 
 }

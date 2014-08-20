@@ -8,6 +8,12 @@ public class Warrior extends Troop {
 		this.defense = 10;
 		this.movementSpeed = 0.1;
 		this.onWay = false;
+		this.price = 10;
+	}
+	
+	@Override
+	public String toString(){
+		return "Warrior";
 	}
 
 }

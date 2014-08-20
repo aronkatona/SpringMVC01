@@ -1,6 +1,7 @@
 package com.aronkatona.controllers;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -23,12 +24,10 @@ public class MapController {
 	public String welcome(Model model, @RequestParam Map<String, String> reqPar) {
 		String userName = reqPar.get("user");
 		Manager manager = new Manager();
-		System.out.println(manager.getMap().getSize());
 		boolean success = false;
 		User user = null;
 		for (User u : manager.getUsers()) {
 			if (u.getName().equals(userName)) {
-				System.out.println("sikeres bejelentkezés");
 				user = u;
 				success = true;
 				break;
@@ -56,9 +55,10 @@ public class MapController {
 			model.addAttribute("fields", manager.getMap().getFields());
 			return "map";
 		}
-
-		System.out.println("nincs ilyen user");
-		return "redirect:/";
+		else{
+			model.addAttribute("notSuccessLogin", "notSuccessLogin");
+			return "welcome";
+		}
 	}
 
 	@RequestMapping(value = "/backToMap.{i}.{j}.{userName}")
@@ -129,12 +129,8 @@ public class MapController {
 		for(User u: manager.getUsers()){
 			if(u.getName().equals(userName)) user = u;
 		}
-		System.out.println(new Date());
-		System.out.println("------------------------------");
+
 		for(Troop t: user.getTroops()){
-			/*if(t.isOnWay() && t.getDate().after(new Date())){
-				t.setOnWay(false);
-			}*/
 			if(!(t.isOnWay() && t.getDate().after(new Date()))){
 				t.setOnWay(false);
 				t.setDateToNull();
@@ -165,9 +161,19 @@ public class MapController {
 	@RequestMapping(value = "/buyTroops.{i}.{j}.{userName}")
 	public String buyTroops(Model model, @PathVariable int i,
 			@PathVariable int j, @PathVariable String userName) {
+		
+		Manager manager = new Manager();
+		User user = null;
+		for(User u: manager.getUsers()){
+			if(u.getName().equals(userName)) user = u;
+		}
+		
 		model.addAttribute("userName", userName);
 		model.addAttribute("X", i);
 		model.addAttribute("Y", j);
+		model.addAttribute("gold", user.getGold());
+		model.addAttribute("priceOfWarrior", new Warrior().getPrice());
+		model.addAttribute("priceOfArcher", new Archer().getPrice());
 		return "buyTroops";
 	}
 
@@ -177,14 +183,30 @@ public class MapController {
 			@RequestParam("numberOfWarriors") int numberOfWarriors,
 			@RequestParam("numberOfArchers") int numberOfArchers,
 			@PathVariable("userName") String userName) {
+		
+		
 		Manager manager = new Manager();
-		for (int w = 0; w < numberOfWarriors; ++w)
+		User user = null;
+		for(User u: manager.getUsers()){
+			if(u.getName().equals(userName)) user = u;
+		}
+		
+		for (int w = 0; w < numberOfWarriors; ++w){
 			manager.getMap().getFields(i, j).getUser().addTroop(new Warrior());
-		for (int a = 0; a < numberOfArchers; ++a)
+			user.removeGold(new Warrior().getPrice());
+		}
+			
+		for (int a = 0; a < numberOfArchers; ++a){
 			manager.getMap().getFields(i, j).getUser().addTroop(new Archer());
+			user.removeGold(new Archer().getPrice());
+		}
+			
 
 		return "redirect:/inVillage.{i}.{j}.{userName}";
 	}
+	
+	
+	
 
 	@RequestMapping(value = "/sendUnit.{i}.{j}.{userName}")
 	public String sendUnit(Model model, @PathVariable int i,
@@ -198,8 +220,8 @@ public class MapController {
 	@RequestMapping(value="/sentUnit.{i}.{j}.{userName}", method = RequestMethod.GET)
 	public String sentUnit(Model model, @PathVariable int i,
 			@PathVariable int j,
-			@RequestParam("numberOfWarriors") int numberOfWarriors,
-			@RequestParam("numberOfArchers") int numberOfArchers,
+			@RequestParam("numberOfWarriors") int numberOfSentWarriors,
+			@RequestParam("numberOfArchers") int numberOfSentArchers,
 			@PathVariable("userName") String userName){
 		
 		Manager manager = new Manager();
@@ -208,34 +230,86 @@ public class MapController {
 			if(u.getName().equals(userName)) user = u;
 		}
 		
-		System.out.println(user.getX() +"," + user.getY());
-		
-		System.out.println(i + "," + j);
-		
+		int tmpWarriors = numberOfSentWarriors;
+		int tmpArchers = numberOfSentArchers;
 		for(Troop t: user.getTroops()){
-			if(!t.isOnWay() && t instanceof Warrior && numberOfWarriors!=0){
+			if(!t.isOnWay() && t instanceof Warrior && tmpWarriors!=0){
 				t.setOnWay(true);
 				t.setDate(user.getX(),user.getY(),i,j);
-				numberOfWarriors--;
+				tmpWarriors--;
 			}
-			else if(!t.isOnWay() && t instanceof Archer && numberOfArchers!=0){
+			else if(!t.isOnWay() && t instanceof Archer && tmpArchers!=0){
 				t.setOnWay(true);
 				t.setDate(user.getX(),user.getY(),i,j);
-				numberOfArchers--;
+				tmpArchers--;
 			}
 		}
 		
 		
 		//luckyba
-		if(manager.getMap().getFields(i, j).getLucky() != null
-		&& manager.getMap().getFields(i, j).getOasis() == null
-		&& manager.getMap().getFields(i, j).getUser() == null){
+		if(manager.getMap().getFields(i, j).getLucky() != null	&& manager.getMap().getFields(i, j).getOasis() == null	&& manager.getMap().getFields(i, j).getUser() == null){
+			
 			user.addGold(manager.getMap().getFields(i, j).getLucky().getGold());
 			manager.getMap().getFields(i, j).getLucky().setGold(0);
 		}
 	
 		
 		//oasisba
+		if(manager.getMap().getFields(i, j).getOasis() != null   && manager.getMap().getFields(i, j).getLucky() == null	   && manager.getMap().getFields(i, j).getUser() == null){
+			
+			double damage = numberOfSentWarriors * new Warrior().getDamage() + numberOfSentArchers * new Archer().getDamage();
+			double defense = 0;		
+			for(Troop t : manager.getMap().getFields(i, j).getOasis().getTroops()){
+				defense += t.getDefense();
+			}
+			
+	
+			//vmi bonuslogic is kéne, hogy ne az elso egysegeket toroljem, de hat most ez is megteszi
+			//a játékos nyert
+			if(damage > defense){				
+				user.addGold(manager.getMap().getFields(i, j).getOasis().getGold());
+				manager.getMap().getFields(i, j).getOasis().getTroops().clear();
+				
+				Iterator<Troop> it = user.getTroops().iterator();
+				while(it.hasNext()){
+					Troop troop = it.next();					
+
+					if(defense >= troop.getDamage() && troop.isOnWay()){
+						it.remove();
+						defense-= troop.getDamage();
+					}
+				}
+
+			}
+			//a játékos elbukott
+			else if(damage < defense){
+				Iterator<Troop> it = user.getTroops().iterator();
+				while(it.hasNext()){
+					Troop troop = it.next();
+					//valojaban csak azt kene ami odatart, de perpill gozom sincs..
+					if(troop.isOnWay()) it.remove();
+				}
+				
+				it = manager.getMap().getFields(i, j).getOasis().getTroops().iterator();
+				while(it.hasNext()){
+					Troop troop = it.next();
+					if(damage >= troop.getDefense()){
+						it.remove();
+						damage-=troop.getDefense();
+					}
+				}
+			}
+			//mindenki elbukott
+			else{
+				manager.getMap().getFields(i, j).getOasis().getTroops().clear();
+
+				Iterator<Troop> it = user.getTroops().iterator();
+				while(it.hasNext()){
+					Troop troop = it.next();
+					if(troop.isOnWay()) it.remove();
+				}
+			}					
+		}
 		
 		return "redirect:/inVillage.{i}.{j}.{userName}";
 		

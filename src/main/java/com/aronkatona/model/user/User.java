@@ -60,6 +60,10 @@ public class User {
 		this.gold += gold;
 	}
 	
+	public void removeGold(int gold){
+		this.gold -= gold;
+	}
+	
 	public List<Troop> getTroops() {
 		return troops;
 	}

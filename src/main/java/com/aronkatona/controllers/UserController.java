@@ -31,17 +31,13 @@ public class UserController {
 		
 		for(User u: manager.getUsers()){
 			if(u.getName().equals(user)){
-				System.out.println("sikertelen");
-				model.addAttribute("success","sikertelen regisztracio");
-				return "redirect:/";
+				model.addAttribute("notSuccessSignUp","notSuccessSignUp");
+				return "welcome";
 			}
 		}
 		
 		manager.getUsers().add(new User(user));
-		System.out.println("sikeres");
-		for(User u: manager.getUsers()){
-			System.out.println(u.getName());
-		}
+
 		
 		return "welcome";
 	}

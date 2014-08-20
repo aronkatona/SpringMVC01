@@ -6,13 +6,16 @@
 Lépj be a szerverre vagy regisztrálj!
 <form name="input" action = "/controllers/map" method="get">
 Username: <input type="text" name="user">
-<input type="submit" value="Login">
-
+<input type="submit" value="Login"><br>
+#if ($notSuccessLogin == "notSuccessLogin")
+<font size="10" color="red"><br>Sikertelen bejelentkezés</br></font>
+#else 
+#end
+#if ($notSuccessSignUp == "notSuccessSignUp")
+<font size="10" color="red"><br>Sikertelen regisztracio, mar van ilyen user</br></font>
+#else 
+#end
 </form>
 <a href="/controllers/signup">Sign up</a>
-#if (!$success)
-ures
-#else telt
-#end
 </body>
 </html>

@@ -10,8 +10,18 @@ public abstract class Troop {
 	protected double movementSpeed;
 	protected boolean onWay;
 	protected Date date;
+	protected int price;
 	
 	
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
 	public double getHp() {
 		return hp;
 	}
