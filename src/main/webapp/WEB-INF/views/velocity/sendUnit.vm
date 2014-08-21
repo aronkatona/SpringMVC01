@@ -1,12 +1,33 @@
 <html>
 <head>
+<script>
+function validateSendForm() {
+	var numberOfWarriors = parseInt(document.forms["sendForm"]["numberOfWarriors"].value);
+    var numberOfArchers = parseInt(document.forms["sendForm"]["numberOfArchers"].value);
+    if(numberOfWarriors > $numberOfWarriors && numberOfArchers > $numberOfArchers){
+    	alert("Nincs ennyi harcosod se ijjászod");
+    	return false;
+    }
+    else if(numberOfWarriors > $numberOfWarriors){
+    	alert("Nincs ennyi harcosod");
+    	return false;
+    }
+    else if(numberOfArchers > $numberOfArchers){
+    	alert("Nincs ennyi ijjászod");
+    	return false;
+    }
+}
+</script>
+
 <title>Támadás</title>
+
 </head>
 <body>
 Üdv $userName
-<form name="buyTroops" action = "/controllers/sentUnit.$X.$Y.$userName" method="get">
-Harcos: <input type="text" name="numberOfWarriors"></br>
-Ijjász: <input tpye="text" name="numberOfArchers"></br>
+
+<form name="sendForm" action = "/controllers/sentUnit.$X.$Y.$userName" method="get" onsubmit="return validateSendForm()" >
+Harcos: <input type="text" name="numberOfWarriors" value="0">Rendelkezésre áll: $numberOfWarriors</br>
+Ijjász: <input tpye="text" name="numberOfArchers" value="0">Rendelkezésre áll: $numberOfArchers</br>
 <input type="submit" value="Send">
 
 </form>

@@ -1,8 +1,11 @@
 package com.aronkatona.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,8 +40,7 @@ public class MapController {
 		if (success) {
 			for (int i = 0; i < manager.getMap().getSize(); ++i) {
 				for (int j = 0; j < manager.getMap().getSize(); ++j) {
-					if (manager.getMap().getFields(i, j).getOasis() != null
-							&& user.getX() == -1 && user.getY() == -1) {
+					if (manager.getMap().getFields(i, j).getOasis() != null	&& user.getX() == -1 && user.getY() == -1) {
 						manager.getMap().getFields(i, j).setUser(user);
 						user.setX(i);
 						user.setY(j);
@@ -129,11 +131,19 @@ public class MapController {
 		for(User u: manager.getUsers()){
 			if(u.getName().equals(userName)) user = u;
 		}
+		
+		for(Troop t: user.getTroops()){
+			if(!(t.isOnWay() && t.getAttackDate() != null && t.getAttackDate().after(new Date()))){
+				t.setAttackDateToNull();
+			} else {
+				
+			}
+		}
 
 		for(Troop t: user.getTroops()){
-			if(!(t.isOnWay() && t.getDate().after(new Date()))){
+			if(!(t.isOnWay() && t.getBackDate().after(new Date()))){
 				t.setOnWay(false);
-				t.setDateToNull();
+				t.setBackDateToNull();
 			} else {
 				
 			}
@@ -154,6 +164,37 @@ public class MapController {
 		model.addAttribute("numberOfArchers", numberOfArchers);
 		model.addAttribute("numberOfWarriorsOnWay", numberOfWarriorsOnWay);
 		model.addAttribute("numberOfArchersOnWay", numberOfArchersOnWay);
+		model.addAttribute("test",100);
+		
+		Date actDate = new Date();
+		List<Integer> attackTimes = new ArrayList<Integer>();
+		for(Troop t: user.getTroops()){
+			if(t.getAttackDate() != null){
+				int difference = (t.getAttackDate().getHours() * 3600 + 
+					   t.getAttackDate().getMinutes()*60   +
+					   t.getAttackDate().getSeconds()) -
+					   (actDate.getHours() * 3600 +
+					   actDate.getMinutes() * 60 +
+					   actDate.getSeconds() );
+				attackTimes.add(difference);
+			} else attackTimes.add(0);
+		}
+		model.addAttribute("attackTimes",attackTimes);
+
+	
+		List<Integer> backTimes = new ArrayList<Integer>();
+		for(Troop t: user.getTroops()){
+			if(t.getBackDate() != null){
+				int difference = (t.getBackDate().getHours() * 3600 + 
+					   t.getBackDate().getMinutes()*60   +
+					   t.getBackDate().getSeconds()) -
+					   (actDate.getHours() * 3600 +
+					   actDate.getMinutes() * 60 +
+					   actDate.getSeconds() );
+				backTimes.add(difference);
+			} else backTimes.add(0);
+		}
+		model.addAttribute("backTimes",backTimes);
 		
 		return "inVillage";
 	}
@@ -192,12 +233,12 @@ public class MapController {
 		}
 		
 		for (int w = 0; w < numberOfWarriors; ++w){
-			manager.getMap().getFields(i, j).getUser().addTroop(new Warrior());
+			user.getTroops().add(new Warrior());
 			user.removeGold(new Warrior().getPrice());
 		}
 			
 		for (int a = 0; a < numberOfArchers; ++a){
-			manager.getMap().getFields(i, j).getUser().addTroop(new Archer());
+			user.getTroops().add(new Archer());
 			user.removeGold(new Archer().getPrice());
 		}
 			
@@ -211,6 +252,22 @@ public class MapController {
 	@RequestMapping(value = "/sendUnit.{i}.{j}.{userName}")
 	public String sendUnit(Model model, @PathVariable int i,
 						   @PathVariable int j, @PathVariable String userName) {
+		
+		Manager manager = new Manager();
+		User user = null;
+		for(User u: manager.getUsers()){
+			if(u.getName().equals(userName)) user = u;
+		}
+		
+		int numberOfWarriors = 0;
+		int numberOfArchers = 0;
+		for (Troop t : user.getTroops()) {			
+			if (t instanceof Warrior && !t.isOnWay())	numberOfWarriors++;
+			else if (t instanceof Archer && !t.isOnWay()) numberOfArchers++;
+		}
+		
+		model.addAttribute("numberOfWarriors",numberOfWarriors);
+		model.addAttribute("numberOfArchers",numberOfArchers);
 		model.addAttribute("userName", userName);
 		model.addAttribute("X", i);
 		model.addAttribute("Y", j);
@@ -235,12 +292,12 @@ public class MapController {
 		for(Troop t: user.getTroops()){
 			if(!t.isOnWay() && t instanceof Warrior && tmpWarriors!=0){
 				t.setOnWay(true);
-				t.setDate(user.getX(),user.getY(),i,j);
+				t.setDates(user.getX(),user.getY(),i,j);
 				tmpWarriors--;
 			}
 			else if(!t.isOnWay() && t instanceof Archer && tmpArchers!=0){
 				t.setOnWay(true);
-				t.setDate(user.getX(),user.getY(),i,j);
+				t.setDates(user.getX(),user.getY(),i,j);
 				tmpArchers--;
 			}
 		}

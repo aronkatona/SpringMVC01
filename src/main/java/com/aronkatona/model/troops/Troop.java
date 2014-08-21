@@ -9,7 +9,8 @@ public abstract class Troop {
 	protected double defense;
 	protected double movementSpeed;
 	protected boolean onWay;
-	protected Date date;
+	protected Date attackDate;
+	protected Date backDate;
 	protected int price;
 	
 	
@@ -20,7 +21,7 @@ public abstract class Troop {
 		this.price = price;
 	}
 	public void setDate(Date date) {
-		this.date = date;
+		this.attackDate = date;
 	}
 	public double getHp() {
 		return hp;
@@ -52,24 +53,32 @@ public abstract class Troop {
 	public void setOnWay(boolean onWay) {
 		this.onWay = onWay;
 	}
-	public Date getDate() {
-		return date;
+	public Date getAttackDate() {
+		return attackDate;
+	}
+	public Date getBackDate(){
+		return backDate;
 	}
 	
 	
-	public void setDate(int sourceX, int sourceY, int targetX, int targetY) {
+	public void setDates(int sourceX, int sourceY, int targetX, int targetY) {
 		
 		double distance = distanceFromTargetToSource(sourceX,sourceY,targetX,targetY);
 		
 		int bonusTime = (int) bonusTime(distance,movementSpeed);
-		Date actDate = 	new Date(System.currentTimeMillis()+bonusTime*1000);		
-		
-		this.date = actDate;
+		Date attackDate = 	new Date(System.currentTimeMillis()+bonusTime*1000);		
+		Date backDate = new Date(System.currentTimeMillis() + 2*bonusTime*1000);
+		this.attackDate = attackDate;
+		this.backDate = backDate;
 		
 	}
 	
-	public void setDateToNull(){
-		this.date = null;
+	public void setAttackDateToNull(){
+		this.attackDate = null;
+	}
+	
+	public void setBackDateToNull(){
+		this.backDate = null;
 	}
 	
 	public double distanceFromTargetToSource(int sourceX, int sourceY, int targetX, int targetY){

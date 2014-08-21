@@ -1,13 +1,42 @@
 <html>
+
+
+
+<script>
+var myVar=setInterval(function(){myTimer()},1000);
+var asd = $test
+function myTimer() {
+    #foreach($times in $attackTimes)
+		#set($times = $times - 1)
+	#end
+	#foreach($times in $backTimes)
+		#set($times = $times - 1)
+	#end
+	  document.getElementById("demo").innerHTML = asd;
+	  asd = asd - 1;
+}
+</script>
+
+
 <head>
 <title>Falu</title>
 </head>
 <body>
+<p id="demo"></p>
 Üdv $userName a faludban
 Gold: $gold </br>
 Egységeim száma:
 <li>elérhetõ harcosok: $numberOfWarriors     harcosok uton: $numberOfWarriorsOnWay</li>
 <li>elérhetõ ijjászok: $numberOfArchers		 ijjaszok uton: $numberOfArchersOnWay</li></br>
+
+#foreach($times in $attackTimes)
+	<li>$times</li>
+#end
+</br>------------
+#foreach($times in $backTimes)
+	<li>$times</li>
+#end
+
 <a href="/controllers/buyTroops.$X.$Y.$userName">Egység gyártás</a>
 <a href="/controllers/backToMap.$X.$Y.$userName">Térkép</a>
 </body>

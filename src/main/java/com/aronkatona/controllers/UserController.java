@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.aronkatona.model.user.User;
+import com.aronkatona.server.ServerRefresher;
 import com.aronkatona.service.Manager;
 import com.aronkatona.service.Manager;
 
@@ -19,7 +20,8 @@ public class UserController {
 	
 
 	@RequestMapping(value = "/")
-	public String welcome(Locale locale, Model model) {		
+	public String welcome(Locale locale, Model model) {	
+		//new ServerRefresher().start();
 		return "welcome";
 	}
 	
@@ -38,7 +40,7 @@ public class UserController {
 		
 		manager.getUsers().add(new User(user));
 
-		
+		model.addAttribute("successSignUp","successSignUp");
 		return "welcome";
 	}
 	

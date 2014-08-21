@@ -1,12 +1,43 @@
 <html>
 <head>
+<script>
+function validateSignUpForm() {
+	var user1 = document.forms["signUpForm"]["user"].value;
+   	var user2 = document.forms["signUpForm"]["user2"].value;
+  	if( (user1 == "" || user1 == null) && (user2 == "" || user2 == null) ){
+   		document.getElementById("userError1").innerHTML = "üresen hagytad"; 
+   		document.getElementById("userError2").innerHTML = "üresen hagytad";
+   		return false;
+    }
+    else if(user1 == "" || user1 == null){
+    	document.getElementById("userError1").innerHTML = "üresen hagytad";
+    	document.getElementById("userError2").innerHTML = "";
+    	return false;
+    }
+    else if(user2 == "" || user2 == null){
+    	document.getElementById("userError1").innerHTML = "";
+    	document.getElementById("userError2").innerHTML = "üresen hagytad";
+    	return false;
+    }
+    else if (user1 != user2){
+    	alert("A két név nem egyezik");
+    	return false;
+    }
+    
+}
+</script>
 <title>Regisztráció</title>
 </head>
 <body>
-<form name="input" action = "/controllers/welcome" method="get">
-Username: <input type="text" name="user">
-Username: <input type="text" name="user2">
+
+
+<form name="signUpForm" action = "/controllers/welcome" method="get" onsubmit="return validateSignUpForm()" >
+Username: <input type="text" name="user"><font id="userError1" size="3" color="red"></font></br>
+Username: <input type="text" name="user2"><font id="userError2"	size="3" color="red"></font></br>
 <input type="submit" value="Sign up">
 </form>
+
+
+
 </body>
 </html>
