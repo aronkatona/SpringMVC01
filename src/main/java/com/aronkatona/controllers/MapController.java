@@ -38,6 +38,13 @@ public class MapController {
 				break;
 			}
 		}
+		
+		
+		if(session.getAttribute("nameOfUser") != null && session.getAttribute("nameOfUser") !=""){
+			model.addAttribute("notSuccessLogin", "alreadyLoggedin");
+			return "welcome";
+		}
+		
 
 		if (success) {
 			for (int i = 0; i < manager.getMap().getSize(); ++i) {

@@ -11,6 +11,10 @@ Username: <input type="text" name="user">
 <font size="10" color="red"><br>Sikertelen bejelentkezés, nincs ilyen user</br></font>
 #else 
 #end
+#if ($notSuccessLogin == "alreadyLoggedin")
+<font size="10" color="red"><br>Már bevagy jelentkezve, elobb jelentkezz ki</br></font>
+#else 
+#end
 #if ($notSuccessSignUp == "notSuccessSignUp")
 <font size="10" color="red"><br>Sikertelen regisztracio, mar van ilyen user</br></font>
 #else 
