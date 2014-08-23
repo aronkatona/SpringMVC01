@@ -6,6 +6,7 @@
 <body link="black" vlink="black">
 #set($mapSize = $mapSize - 1)
 Üdv $userName x:$X,y:$Y
+<a href="/controllers/logout">Kijelentkezés</a>
 <table border="5" width="500" height="500">
 #foreach($i in [0..$mapSize])
 <tr>

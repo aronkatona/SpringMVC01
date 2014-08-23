@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +26,7 @@ import com.aronkatona.service.Manager;
 public class MapController {
 
 	@RequestMapping(value = "/map", method = RequestMethod.GET)
-	public String welcome(Model model, @RequestParam Map<String, String> reqPar) {
+	public String welcome(Model model, @RequestParam Map<String, String> reqPar,HttpSession session) {
 		String userName = reqPar.get("user");
 		Manager manager = new Manager();
 		boolean success = false;
@@ -50,6 +52,8 @@ public class MapController {
 				}
 			}
 
+			session.setAttribute("nameOfUser", userName);
+			
 			model.addAttribute("X", user.getX());
 			model.addAttribute("Y", user.getY());
 			model.addAttribute("userName", userName);
@@ -119,9 +123,13 @@ public class MapController {
 
 	@RequestMapping(value = "/inVillage.{i}.{j}.{userName}")
 	public String inVillage(Model model, @PathVariable int i,
-			@PathVariable int j, @PathVariable String userName) {
+			@PathVariable int j, @PathVariable String userName, HttpSession session) {
 		Manager manager = new Manager();
 
+		
+		String nameOfUser = (String) session.getAttribute("nameOfUser");
+		model.addAttribute("nameOfUser", nameOfUser);
+		
 		int numberOfWarriors = 0;
 		int numberOfArchers = 0;
 		int numberOfWarriorsOnWay = 0;

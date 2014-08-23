@@ -4,6 +4,8 @@ package com.aronkatona.controllers;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +49,18 @@ public class UserController {
 	@RequestMapping(value="/signup")
 	public String home(Model model){
 		return "signup";
+	}
+	
+	@RequestMapping(value="/logout")
+	public String logout(Model model,HttpSession session){
+		
+		
+		String nameOfUser = (String) session.getAttribute("nameOfUser");
+		System.out.println(session.getAttribute("nameOfUser"));
+		session.setAttribute("nameOfUser", "");
+		System.out.println(session.getAttribute("nameOfUser"));
+		
+		return "welcome";
 	}
 	
 }

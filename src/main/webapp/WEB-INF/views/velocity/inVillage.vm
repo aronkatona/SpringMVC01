@@ -24,6 +24,7 @@ function myTimer() {
 <body>
 <p id="demo"></p>
 Üdv $userName a faludban
+Üdv $nameOfUser
 Gold: $gold </br>
 Egységeim száma:
 <li>elérhetõ harcosok: $numberOfWarriors     harcosok uton: $numberOfWarriorsOnWay</li>
